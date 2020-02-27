@@ -89,7 +89,7 @@ std::ofstream& operator<<(std::ofstream& ofs, Account* account)
     ofs << account->firstName << std::endl;
     ofs << account->lastName << std::endl;
     ofs << account->accountNumber << std::endl;
-    ofs << account->balance;
+    ofs << account->balance << std::endl;
     return ofs;
 }
 
@@ -260,11 +260,14 @@ class Bank
         if (inFile.is_open())
         {
             Account* account;
-	        while (!inFile.eof())
+            inFile >> accountCount;
+            int count = 0;
+	        while (count < accountCount)
             {
                 account = new Account();
                 inFile >> account;
         	    accounts[account->GetAccountNumber()] = account;
+                count++;
             }            
     	    inFile.close();
         }
@@ -273,6 +276,7 @@ class Bank
 	~Bank()
     {
         std::ofstream outFile(BANK_RECORDS, std::ios::trunc);
+        outFile << accountCount << std::endl;
 	    std::map<int, Account*>::iterator itr;
         for (itr = accounts.begin(); itr != accounts.end(); itr++)
         {
