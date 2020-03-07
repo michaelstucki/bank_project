@@ -16,12 +16,8 @@ class Account
     public:
         Account() {}
         Account(std::string firstName, std::string lastName, double balance, int accountNumber)
-        {
-            this->firstName = firstName;
-            this->lastName = lastName;
-            this->balance = balance;
-            this->accountNumber = accountNumber;
-        }
+            : firstName {firstName}, lastName {lastName}, balance {balance}, accountNumber {accountNumber}
+        {}
 
         void SetFirstName(std::string firstName)
         {
@@ -252,10 +248,8 @@ class Bank
         }
 
     public:
-        Bank()
+        Bank() : accountCount {0}
         {
-            accountCount = 0;
-
             std::ifstream inFile;
             inFile.open(BANK_RECORDS);
             if (inFile.is_open())
@@ -282,7 +276,9 @@ class Bank
             for (itr = accounts.begin(); itr != accounts.end(); itr++)
             {
                 outFile << itr->second;
+                delete itr->second;
             }
+            delete &accounts;
             outFile.close();
         }
 
